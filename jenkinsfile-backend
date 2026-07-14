@@ -40,6 +40,59 @@ pipeline {
                 }
             }
         }
+        
+        stage('product-service-build'){
+            steps{
+                dir('product-service') {
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+
+            post{
+                success{
+                    archiveArtifacts artifacts: 'product-service/target/*.jar', fingerprint: true
+                }
+            }
+
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    dir('product-service') {
+                        sh 'mvn sonar:sonar'
+                    }
+                }
+            }
+        }
+
+        stage('Order-service-build'){
+            steps{
+                dir('order-service') {
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+
+            post{
+                success{
+                    archiveArtifacts artifacts: 'order-service/target/*.jar', fingerprint: true
+                }
+            }
+
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    dir('order-service') {
+                        sh 'mvn sonar:sonar'
+                    }
+                }
+            }
+        }
+
+
+
     }
 }
 
