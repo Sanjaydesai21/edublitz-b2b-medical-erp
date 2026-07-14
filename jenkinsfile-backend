@@ -40,8 +40,8 @@ pipeline {
                 }
             }
         }
-        
-        stage('product-service-build'){
+
+        stage('Product-service-build'){
             steps{
                 dir('product-service') {
                     sh 'mvn clean package -DskipTests'
@@ -90,9 +90,6 @@ pipeline {
                 }
             }
         }
-
-
-
     }
 }
 
