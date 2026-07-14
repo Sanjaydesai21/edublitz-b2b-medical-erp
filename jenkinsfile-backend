@@ -5,6 +5,8 @@ pipeline {
         maven 'maven1'
     }
 
+    jdk 'JDK17'
+
     environment {
         my_aws_credential = credentials('aws-access')
     }
