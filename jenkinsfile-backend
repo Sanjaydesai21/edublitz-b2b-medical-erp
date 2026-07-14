@@ -96,22 +96,22 @@ pipeline {
                 sh '''
                 aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 194226864100.dkr.ecr.ap-south-1.amazonaws.com
 
-                docker build -t user-service/user-service .
+                docker build -t user-service user-service/.
                 docker tag user-service:latest 194226864100.dkr.ecr.ap-south-1.amazonaws.com/user-service:latest
                 docker push 194226864100.dkr.ecr.ap-south-1.amazonaws.com/user-service:latest
 
-                docker build -t products-service/products-service .
+                docker build -t products-service product-service/.
                 docker tag products-service:latest 194226864100.dkr.ecr.ap-south-1.amazonaws.com/products-service:latest
                 docker push 194226864100.dkr.ecr.ap-south-1.amazonaws.com/products-service:latest
 
-                docker build -t orders-service/orders-service .
+                docker build -t orders-service order-service/.
                 docker tag orders-service:latest 194226864100.dkr.ecr.ap-south-1.amazonaws.com/orders-service:latest
                 docker push 194226864100.dkr.ecr.ap-south-1.amazonaws.com/orders-service:latest
                 '''
             }
         }
 
-
+        
 
     }
 }
