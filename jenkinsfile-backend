@@ -31,7 +31,7 @@ pipeline {
 
         }
 
-        stage('SonarQube Analysis') {
+        stage('SonarQube Analysis - user-service') {
             steps {
                 withSonarQubeEnv('sonar') {
                     dir('user-service') {
@@ -56,7 +56,7 @@ pipeline {
 
         }
 
-        stage('SonarQube Analysis') {
+        stage('SonarQube Analysis - product-service') {
             steps {
                 withSonarQubeEnv('sonar') {
                     dir('product-service') {
@@ -81,7 +81,7 @@ pipeline {
 
         }
 
-        stage('SonarQube Analysis') {
+        stage('SonarQube Analysis - order-service') {
             steps {
                 withSonarQubeEnv('sonar') {
                     dir('order-service') {
