@@ -90,6 +90,29 @@ pipeline {
                 }
             }
         }
+
+        stage("Docker Build and Push "){
+            steps{
+                sh '''
+                aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 194226864100.dkr.ecr.ap-south-1.amazonaws.com
+
+                docker build -t user-service .
+                docker tag user-service:latest 194226864100.dkr.ecr.ap-south-1.amazonaws.com/user-service:latest
+                docker push 194226864100.dkr.ecr.ap-south-1.amazonaws.com/user-service:latest
+
+                docker build -t products-service .
+                docker tag products-service:latest 194226864100.dkr.ecr.ap-south-1.amazonaws.com/products-service:latest
+                docker push 194226864100.dkr.ecr.ap-south-1.amazonaws.com/products-service:latest
+
+                docker build -t orders-service .
+                docker tag orders-service:latest 194226864100.dkr.ecr.ap-south-1.amazonaws.com/orders-service:latest
+                docker push 194226864100.dkr.ecr.ap-south-1.amazonaws.com/orders-service:latest
+                '''
+            }
+        }
+
+        
+
     }
 }
 
