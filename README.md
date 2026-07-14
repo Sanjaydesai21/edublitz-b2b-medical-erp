@@ -30,17 +30,17 @@ A production-grade **Medical Domain B2B ERP** for hospitals, distributors, and a
 
 ## Tech Stack
 
-| Layer        | Technology                                      |
-|--------------|-------------------------------------------------|
-| Frontend     | React 18 + Vite + TailwindCSS + TanStack Query  |
-| Backend      | Spring Boot 3.x (3 microservices)               |
-| Database     | MongoDB (Atlas recommended)                     |
-| Auth         | JWT (HMAC-SHA256 / HS256), shared secret        |
-| Cloud        | AWS (EKS, S3, CloudFront, Route53) — optional   |
-| IaC          | Terraform (modular)                             |
-| CI/CD        | Jenkins (see `jenkins/`)                        |
-| Containers   | Docker + Kubernetes manifests in `k8s/`         |
-| API Docs     | Swagger / OpenAPI 3.0 per service               |
+| Layer      | Technology                                     |
+| ---------- | ---------------------------------------------- |
+| Frontend   | React 18 + Vite + TailwindCSS + TanStack Query |
+| Backend    | Spring Boot 3.x (3 microservices)              |
+| Database   | MongoDB (Atlas recommended)                    |
+| Auth       | JWT (HMAC-SHA256 / HS256), shared secret       |
+| Cloud      | AWS (EKS, S3, CloudFront, Route53) — optional  |
+| IaC        | Terraform (modular)                            |
+| CI/CD      | Jenkins (see `jenkins/`)                       |
+| Containers | Docker + Kubernetes manifests in `k8s/`        |
+| API Docs   | Swagger / OpenAPI 3.0 per service              |
 
 ## Domain Highlights
 
@@ -51,19 +51,19 @@ A production-grade **Medical Domain B2B ERP** for hospitals, distributors, and a
 
 ## Services
 
-| Service         | Port | Responsibilities |
-|-----------------|------|------------------|
-| user-service    | 8081 | Auth, JWT, users, organizations, audit hooks |
-| product-service | 8082 | Products, inventory batches, reserve/release APIs |
+| Service         | Port | Responsibilities                                           |
+| --------------- | ---- | ---------------------------------------------------------- |
+| user-service    | 8081 | Auth, JWT, users, organizations, audit hooks               |
+| product-service | 8082 | Products, inventory batches, reserve/release APIs          |
 | order-service   | 8083 | Orders; calls product-service over HTTP with forwarded JWT |
 
 ## Roles
 
-| Role        | Access |
-|-------------|--------|
+| Role        | Access                                                          |
+| ----------- | --------------------------------------------------------------- |
 | ADMIN       | Organizations, all products/inventory (scoped APIs), all orders |
-| DISTRIBUTOR | Own catalog & stock batches, incoming orders for own org |
-| HOSPITAL    | Browse catalog, create/track own org’s orders |
+| DISTRIBUTOR | Own catalog & stock batches, incoming orders for own org        |
+| HOSPITAL    | Browse catalog, create/track own org’s orders                   |
 
 ## Project Structure
 
@@ -81,17 +81,17 @@ A production-grade **Medical Domain B2B ERP** for hospitals, distributors, and a
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [docs/README.md](docs/README.md) | Index of all guides |
-| [docs/MANUAL_DEPLOYMENT.md](docs/MANUAL_DEPLOYMENT.md) | Run locally without Docker |
-| [docs/DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md) | Docker Compose + Atlas |
+| Document                                                       | Description                        |
+| -------------------------------------------------------------- | ---------------------------------- |
+| [docs/README.md](docs/README.md)                               | Index of all guides                |
+| [docs/MANUAL_DEPLOYMENT.md](docs/MANUAL_DEPLOYMENT.md)         | Run locally without Docker         |
+| [docs/DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md)         | Docker Compose + Atlas             |
 | [docs/KUBERNETES_DEPLOYMENT.md](docs/KUBERNETES_DEPLOYMENT.md) | EKS + AWS Load Balancer Controller |
-| [k8s/README.md](k8s/README.md) | `kubectl apply` order |
-| [docs/TERRAFORM_DEPLOYMENT.md](docs/TERRAFORM_DEPLOYMENT.md) | AWS infrastructure |
-| [terraform/README.md](terraform/README.md) | Terraform modules |
-| [docs/JENKINS_DEPLOYMENT.md](docs/JENKINS_DEPLOYMENT.md) | CI/CD pipelines |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Service boundaries & data flows |
+| [k8s/README.md](k8s/README.md)                                 | `kubectl apply` order              |
+| [docs/TERRAFORM_DEPLOYMENT.md](docs/TERRAFORM_DEPLOYMENT.md)   | AWS infrastructure                 |
+| [terraform/README.md](terraform/README.md)                     | Terraform modules                  |
+| [docs/JENKINS_DEPLOYMENT.md](docs/JENKINS_DEPLOYMENT.md)       | CI/CD pipelines                    |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                   | Service boundaries & data flows    |
 
 ## Quick Start
 
@@ -102,13 +102,13 @@ A production-grade **Medical Domain B2B ERP** for hospitals, distributors, and a
 
 ## Prerequisites
 
-| Tool | Notes |
-|------|--------|
-| **JDK 17** | Use for **running** services. Set `JAVA_HOME` to JDK 17 before **`mvn`** if your default JDK is newer (avoids Lombok/compiler issues). |
-| Maven 3.9+ | `mvn clean package` per service |
-| Node.js 18+ | Frontend |
-| MongoDB | Local or Atlas; set **`MONGODB_URI`** (see each `.env.example`) |
-| Docker | Optional (Compose) |
+| Tool        | Notes                                                                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **JDK 17**  | Use for **running** services. Set `JAVA_HOME` to JDK 17 before **`mvn`** if your default JDK is newer (avoids Lombok/compiler issues). |
+| Maven 3.9+  | `mvn clean package` per service                                                                                                        |
+| Node.js 18+ | Frontend                                                                                                                               |
+| MongoDB     | Local or Atlas; set **`MONGODB_URI`** (see each `.env.example`)                                                                        |
+| Docker      | Optional (Compose)                                                                                                                     |
 
 ## Configuration
 
@@ -138,3 +138,5 @@ cd user-service && mvn clean package -DskipTests
 
 Proprietary — **Edublitz — Powered by Greamio Technologies Pvt Ltd.**  
 See [LICENSE](LICENSE). All rights reserved.
+
+test1
