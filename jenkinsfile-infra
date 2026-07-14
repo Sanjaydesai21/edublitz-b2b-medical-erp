@@ -158,4 +158,10 @@ pipeline {
             echo 'Infrastructure Pipeline Failed.'
         }
     }
+
+    stage('Terraform Destroy') {
+        steps{
+            sh 'terraform destroy -auto-approve'
+        }
+    }
 }
