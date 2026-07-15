@@ -1,142 +1,228 @@
-# EduBlitz Medical B2B ERP System
+📚 EduBlitz B2B Medical ERP
 
-A production-grade **Medical Domain B2B ERP** for hospitals, distributors, and administrators. The stack is **three Spring Boot microservices**, a **React (Vite)** SPA, and **MongoDB** (Atlas or self-hosted).
+A production-ready MERN Stack Medical ERP application deployed using multiple DevOps deployment strategies on AWS.
 
-## Architecture Overview
+📌 Project Overview
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        CloudFront CDN                           │
-│                    (React Frontend via S3)                      │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────────┐
-│              AWS ALB Ingress Controller (EKS)                   │
-└──────┬─────────────────────┬──────────────────────┬────────────┘
-       │                     │                      │
-┌──────▼──────┐    ┌─────────▼────────┐   ┌────────▼────────┐
-│ user-service│    │ product-service  │   │  order-service  │
-│  Port: 8081 │    │   Port: 8082     │   │   Port: 8083    │
-│             │    │                  │   │                 │
-│ Auth / JWT  │    │ Catalog / Stock  │   │ Order lifecycle │
-│ Roles/Orgs  │    │ Batches / Reserve│   │ (+ product API) │
-└──────┬──────┘    └─────────┬────────┘   └────────┬────────┘
-       │                     │                      │
-┌──────▼─────────────────────▼──────────────────────▼─────────────┐
-│                     MongoDB Atlas (or local)                    │
-│   users_db          products_db            orders_db            │
-└──────────────────────────────────────────────────────────────────┘
-```
+EduBlitz B2B Medical ERP is a full-stack MERN application developed for managing medical inventory, orders, distributors, customers, and ERP operations.
 
-## Tech Stack
+The main objective of this repository is not only to build a MERN application but also to demonstrate different DevOps deployment strategies used in real-world production environments.
 
-| Layer      | Technology                                     |
-| ---------- | ---------------------------------------------- |
-| Frontend   | React 18 + Vite + TailwindCSS + TanStack Query |
-| Backend    | Spring Boot 3.x (3 microservices)              |
-| Database   | MongoDB (Atlas recommended)                    |
-| Auth       | JWT (HMAC-SHA256 / HS256), shared secret       |
-| Cloud      | AWS (EKS, S3, CloudFront, Route53) — optional  |
-| IaC        | Terraform (modular)                            |
-| CI/CD      | Jenkins (see `jenkins/`)                       |
-| Containers | Docker + Kubernetes manifests in `k8s/`        |
-| API Docs   | Swagger / OpenAPI 3.0 per service              |
+🚀 Deployment Journey
 
-## Domain Highlights
+This project has been deployed using four different approaches, allowing me to understand the complete software deployment lifecycle.
 
-- **Catalog**: Active products only appear in hospital/distributor listings; soft-deleted products free their **SKU** for reuse.
-- **Inventory**: Stock is tracked per **product + warehouse + batch** (`POST /products/inventory`). **Available** (sellable) = stored quantity minus reserved.
-- **Orders**: Hospitals place orders; **distributors** (or admins) **approve** only when enough sellable stock exists — approval calls product-service to **reserve** stock (multi-batch allocation). Distributors only act on orders assigned to their **organization ID**.
-- **Admin UI**: Organization **MongoDB IDs** are listed under **Organizations** for integration and user registration.
+1️⃣ Traditional AWS EC2 Deployment
+Launch EC2 Instance
+Configure Security Groups
+Install Node.js
+Install PM2
+Configure Nginx Reverse Proxy
+Deploy React Frontend
+Deploy Node Backend
+Configure Environment Variables
+Enable HTTPS
+Technologies
+AWS EC2
+Ubuntu
+Nginx
+PM2
+Node.js
+2️⃣ Docker Deployment
 
-## Services
+Containerized the complete application using Docker.
 
-| Service         | Port | Responsibilities                                           |
-| --------------- | ---- | ---------------------------------------------------------- |
-| user-service    | 8081 | Auth, JWT, users, organizations, audit hooks               |
-| product-service | 8082 | Products, inventory batches, reserve/release APIs          |
-| order-service   | 8083 | Orders; calls product-service over HTTP with forwarded JWT |
+Implemented
+Multi-stage Dockerfile
+Backend Docker Image
+Frontend Docker Image
+Docker Network
+Docker Volumes
+Environment Variables
+Docker Compose
+Technologies
+Docker
+Docker Compose
+3️⃣ Kubernetes Deployment
 
-## Roles
+Migrated Docker containers to Kubernetes for orchestration.
 
-| Role        | Access                                                          |
-| ----------- | --------------------------------------------------------------- |
-| ADMIN       | Organizations, all products/inventory (scoped APIs), all orders |
-| DISTRIBUTOR | Own catalog & stock batches, incoming orders for own org        |
-| HOSPITAL    | Browse catalog, create/track own org’s orders                   |
+Implemented
+Deployments
+ReplicaSets
+Services
+ConfigMaps
+Secrets
+Rolling Updates
+Self-Healing
+Scaling
+Kubernetes Objects
+Deployment
+Service
+ConfigMap
+Secret
+Pods
+ReplicaSet
+4️⃣ CI/CD Pipeline using Jenkins
 
-## Project Structure
+Built a complete Jenkins Pipeline for automated deployment.
 
-```
-├── frontend/           # React + Vite (HashRouter for static hosting)
-├── user-service/
-├── product-service/
-├── order-service/
-├── docker/
-├── k8s/
-├── terraform/
-├── jenkins/
-└── docs/               # Deployment & architecture guides
-```
+Pipeline stages include:
 
-## Documentation
+Git Clone
 
-| Document                                                       | Description                        |
-| -------------------------------------------------------------- | ---------------------------------- |
-| [docs/README.md](docs/README.md)                               | Index of all guides                |
-| [docs/MANUAL_DEPLOYMENT.md](docs/MANUAL_DEPLOYMENT.md)         | Run locally without Docker         |
-| [docs/DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md)         | Docker Compose + Atlas             |
-| [docs/KUBERNETES_DEPLOYMENT.md](docs/KUBERNETES_DEPLOYMENT.md) | EKS + AWS Load Balancer Controller |
-| [k8s/README.md](k8s/README.md)                                 | `kubectl apply` order              |
-| [docs/TERRAFORM_DEPLOYMENT.md](docs/TERRAFORM_DEPLOYMENT.md)   | AWS infrastructure                 |
-| [terraform/README.md](terraform/README.md)                     | Terraform modules                  |
-| [docs/JENKINS_DEPLOYMENT.md](docs/JENKINS_DEPLOYMENT.md)       | CI/CD pipelines                    |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                   | Service boundaries & data flows    |
+↓
 
-## Quick Start
+Install Dependencies
 
-1. **Local:** [docs/MANUAL_DEPLOYMENT.md](docs/MANUAL_DEPLOYMENT.md) — HashRouter URLs like `http://localhost:5173/#/login`.
-2. **Docker Compose:** [docs/DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md) — APIs only; Atlas via `docker/.env`; frontend elsewhere (e.g. S3 + CloudFront).
-3. **Kubernetes:** [docs/KUBERNETES_DEPLOYMENT.md](docs/KUBERNETES_DEPLOYMENT.md) + [k8s/README.md](k8s/README.md).
-4. **Terraform:** [docs/TERRAFORM_DEPLOYMENT.md](docs/TERRAFORM_DEPLOYMENT.md).
+↓
 
-## Prerequisites
+Run Tests
 
-| Tool        | Notes                                                                                                                                  |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **JDK 17**  | Use for **running** services. Set `JAVA_HOME` to JDK 17 before **`mvn`** if your default JDK is newer (avoids Lombok/compiler issues). |
-| Maven 3.9+  | `mvn clean package` per service                                                                                                        |
-| Node.js 18+ | Frontend                                                                                                                               |
-| MongoDB     | Local or Atlas; set **`MONGODB_URI`** (see each `.env.example`)                                                                        |
-| Docker      | Optional (Compose)                                                                                                                     |
+↓
 
-## Configuration
+Build Frontend
 
-- **`application.yml`** defaults use **local MongoDB** (`mongodb://127.0.0.1:27017/...`). Set **`MONGODB_URI`** for Atlas.
-- Copy **`.env.example` → `.env`** per service (gitignored). Load env before `java -jar`, e.g. `set -a && source .env && set +a` — see [MANUAL_DEPLOYMENT.md](docs/MANUAL_DEPLOYMENT.md).
-- **Same `JWT_SECRET`** on user-, product-, and order-service.
+↓
 
-## Security Notes
+Build Docker Images
 
-- Bearer JWT on APIs except public auth routes.
-- **order-service → product-service** over HTTP with JWT (no shared DB).
-- Use K8s Secrets / AWS Secrets Manager in production.
+↓
 
-## Development
+Push Images
 
-```bash
-cd frontend && npm install && npm run dev
-npm run lint && npm run build    # frontend/.eslintrc.cjs
+↓
 
-export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null)   # macOS
-cd user-service && mvn clean package -DskipTests
-```
+Deploy to Kubernetes
 
-`*/target/` and `frontend/dist/` are gitignored. Clean with `mvn clean` and delete `frontend/dist` if needed.
+↓
 
-## License
+Verify Deployment
+Jenkins Features
+Declarative Pipeline
+Automated Build
+Automated Deployment
+Kubernetes Deployment
+AWS Integration
+🏗 Architecture
+Developer
+│
+▼
+GitHub Repository
+│
+▼
+Jenkins Pipeline
+│
+┌─────────────────┼─────────────────┐
+▼ ▼ ▼
+Build Frontend Build Backend Docker Build
+│ │ │
+└──────────────► Docker Images ◄────┘
+│
+▼
+Kubernetes Cluster
+│
+┌──────────┴──────────┐
+▼ ▼
+React Frontend Node Backend
+│
+▼
+MongoDB Database
+🛠 Tech Stack
+Frontend
+React.js
+Redux
+Bootstrap
+Axios
+Backend
+Node.js
+Express.js
+Database
+MongoDB
+DevOps
+AWS EC2
+Docker
+Kubernetes
+Jenkins
+Git
+GitHub
+Linux
+Nginx
+PM2
+📂 Project Structure
+frontend/
+backend/
+k8s/
+docker/
+jenkins/
+⚙ Installation
+Clone Repository
+git clone https://github.com/Sanjaydesai21/edublitz-b2b-medical-erp.git
 
-Proprietary — **Edublitz — Powered by Greamio Technologies Pvt Ltd.**  
-See [LICENSE](LICENSE). All rights reserved.
+cd edublitz-b2b-medical-erp
+Backend
+cd backend
 
-test1
+npm install
+
+npm start
+Frontend
+cd frontend
+
+npm install
+
+npm run dev
+🐳 Docker Deployment
+docker-compose up --build
+☸ Kubernetes Deployment
+kubectl apply -f k8s/
+⚙ Jenkins Pipeline
+
+Pipeline automatically performs:
+
+Source Code Checkout
+Dependency Installation
+Build Application
+Docker Image Creation
+Kubernetes Deployment
+Rollout Verification
+📊 Features
+User Authentication
+Medical Inventory Management
+Order Management
+Dashboard
+Customer Management
+Distributor Management
+Secure APIs
+Responsive UI
+💡 DevOps Skills Demonstrated
+
+✔ Git & GitHub
+
+✔ Linux Administration
+
+✔ AWS EC2
+
+✔ MongoDB
+
+✔ Docker
+
+✔ Docker Compose
+
+✔ Kubernetes
+
+✔ Jenkins CI/CD
+
+✔ Nginx Reverse Proxy
+
+✔ PM2 Process Management
+
+✔ Environment Variable Management
+
+✔ Production Deployment
+
+✔ Rolling Updates
+
+✔ Kubernetes Services
+
+✔ ConfigMaps & Secrets
